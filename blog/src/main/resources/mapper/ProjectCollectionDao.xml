@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.echo.blog.dao.ProjectCollectionDao">
+    <resultMap id="BaseResultMap" type="com.echo.blog.po.ProjectCollectionPo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="project_name" jdbcType="VARCHAR" property="projectName"/>
+        <result column="ssh" jdbcType="VARCHAR" property="ssh"/>
+        <result column="https" jdbcType="VARCHAR" property="https"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+    id, project_name, ssh, https, create_time, update_time
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from project_collection
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="getList" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from project_collection
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from project_collection
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.echo.blog.po.ProjectCollectionPo"
+            useGeneratedKeys="true">
+    insert into project_collection (project_name, ssh, https,
+      create_time, update_time)
+    values (#{projectName,jdbcType=VARCHAR}, #{ssh,jdbcType=VARCHAR}, #{https,jdbcType=VARCHAR},
+      #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
+  </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.echo.blog.po.ProjectCollectionPo"
+            useGeneratedKeys="true">
+        insert into project_collection
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectName != null">
+                project_name,
+            </if>
+            <if test="ssh != null">
+                ssh,
+            </if>
+            <if test="https != null">
+                https,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectName != null">
+                #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="ssh != null">
+                #{ssh,jdbcType=VARCHAR},
+            </if>
+            <if test="https != null">
+                #{https,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.echo.blog.po.ProjectCollectionPo">
+        update project_collection
+        <set>
+            <if test="projectName != null">
+                project_name = #{projectName,jdbcType=VARCHAR},
+            </if>
+            <if test="ssh != null">
+                ssh = #{ssh,jdbcType=VARCHAR},
+            </if>
+            <if test="https != null">
+                https = #{https,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.echo.blog.po.ProjectCollectionPo">
+    update project_collection
+    set project_name = #{projectName,jdbcType=VARCHAR},
+      ssh = #{ssh,jdbcType=VARCHAR},
+      https = #{https,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

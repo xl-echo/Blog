@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.echo.blog.dao.ArticleDao">
+
+    <resultMap id="BaseResultMap" type="com.echo.blog.po.ArticlePo">
+        <id column="id" jdbcType="BIGINT" property="id"/>
+        <result column="title" jdbcType="VARCHAR" property="title"/>
+        <result column="clicks" jdbcType="BIGINT" property="clicks"/>
+        <result column="author_id" jdbcType="BIGINT" property="authorId"/>
+        <result column="author" jdbcType="VARCHAR" property="author"/>
+        <result column="if_original" jdbcType="TINYINT" property="ifOriginal"/>
+        <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
+        <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+    id, title, clicks, author_id, author, if_original, create_time, update_time
+  </sql>
+    <sql id="Blob_Column_List">
+    content
+  </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from article
+        where id = #{id,jdbcType=BIGINT}
+    </select>
+    <select id="getAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from article limit 10
+    </select>
+
+    <select id="getList" parameterType="com.echo.blog.param.ArticleParam" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from article ORDER BY create_time desc limit #{page,jdbcType=INTEGER}, #{size,jdbcType=INTEGER}
+    </select>
+
+    <select id="getDetail" parameterType="java.lang.Integer" resultType="com.echo.blog.po.ArticlePo">
+        select
+        <include refid="Base_Column_List"/>
+        ,
+        <include refid="Blob_Column_List"/>
+        from article where id = #{articleId,jdbcType=INTEGER}
+    </select>
+
+    <select id="getHotList" resultMap="BaseResultMap">
+      select
+      <include refid="Base_Column_List"/>
+      ,
+      <include refid="Blob_Column_List"/>
+      from article ORDER BY clicks desc limit 0, 5
+    </select>
+
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from article
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.echo.blog.po.ArticlePo"
+            useGeneratedKeys="true">
+    insert into article (title, clicks, author_id, author,
+      if_original, create_time, update_time,
+      content)
+    values (#{title,jdbcType=VARCHAR}, #{clicks,jdbcType=BIGINT}, #{authorId,jdbcType=BIGINT}, #{author,jdbcType=VARCHAR},
+      #{ifOriginal,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP},
+      #{content,jdbcType=BLOB})
+  </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.echo.blog.po.ArticlePo"
+            useGeneratedKeys="true">
+        insert into article
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                title,
+            </if>
+            <if test="clicks != null">
+                clicks,
+            </if>
+            <if test="authorId != null">
+                author_id,
+            </if>
+            <if test="author != null">
+                author,
+            </if>
+            <if test="ifOriginal != null">
+                if_original,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+            <if test="content != null">
+                content,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="clicks != null">
+                #{clicks,jdbcType=BIGINT},
+            </if>
+            <if test="authorId != null">
+                #{authorId,jdbcType=BIGINT},
+            </if>
+            <if test="author != null">
+                #{author,jdbcType=VARCHAR},
+            </if>
+            <if test="ifOriginal != null">
+                #{ifOriginal,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                #{content,jdbcType=BLOB},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.echo.blog.po.ArticlePo">
+        update article
+        <set>
+            <if test="title != null">
+                title = #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="clicks != null">
+                clicks = #{clicks,jdbcType=BIGINT},
+            </if>
+            <if test="authorId != null">
+                author_id = #{authorId,jdbcType=BIGINT},
+            </if>
+            <if test="author != null">
+                author = #{author,jdbcType=VARCHAR},
+            </if>
+            <if test="ifOriginal != null">
+                if_original = #{ifOriginal,jdbcType=TINYINT},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="content != null">
+                content = #{content,jdbcType=BLOB},
+            </if>
+        </set>
+        where id = #{id,jdbcType=BIGINT}
+    </update>
+    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.echo.blog.po.ArticlePo">
+    update article
+    set title = #{title,jdbcType=VARCHAR},
+      clicks = #{clicks,jdbcType=BIGINT},
+      author_id = #{authorId,jdbcType=BIGINT},
+      author = #{author,jdbcType=VARCHAR},
+      if_original = #{ifOriginal,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      content = #{content,jdbcType=BLOB}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+    <update id="updateByPrimaryKey" parameterType="com.echo.blog.po.ArticlePo">
+    update article
+    set title = #{title,jdbcType=VARCHAR},
+      clicks = #{clicks,jdbcType=BIGINT},
+      author_id = #{authorId,jdbcType=BIGINT},
+      author = #{author,jdbcType=VARCHAR},
+      if_original = #{ifOriginal,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      update_time = #{updateTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
