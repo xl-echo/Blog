@@ -14,7 +14,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "github-markdown-css": "^3.0.1",
     "highlight.js": "^9.18.1",
     "html-loader": "^0.5.5",
@@ -34,7 +34,7 @@
   },
   "devDependencies": {
     "autoprefixer": "^7.1.2",
-    "axios": "^0.18.1",
+    "axios": "^0.21.1",
     "babel-core": "^6.22.1",
     "babel-eslint": "^8.2.1",
     "babel-helper-vue-jsx-merge-props": "^2.0.3",
