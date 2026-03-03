@@ -1,0 +1,313 @@
+<template>
+  <div class="article-card" @mouseenter="hover = true" @mouseleave="hover = false">
+    <div class="article-header">
+      <div class="article-image" :style="{ backgroundImage: `url(${article.image})` }">
+        <div class="article-tag" :style="{ backgroundColor: tagColor }">
+          {{ article.tag }}
+        </div>
+      </div>
+    </div>
+    <div class="article-content">
+      <h2 class="article-title">
+        <router-link :to="`/article/${article.id}`" class="title-link">
+          {{ article.title }}
+        </router-link>
+      </h2>
+      <p class="article-excerpt">{{ article.excerpt }}</p>
+      <div class="article-meta">
+        <div class="meta-left">
+          <span class="meta-item">
+            <i class="icon-date"></i>
+            {{ article.date }}
+          </span>
+          <span class="meta-item">
+            <i class="icon-tag"></i>
+            {{ article.tags.join(', ') }}
+          </span>
+        </div>
+        <div class="meta-right">
+          <span class="meta-item">
+            <i class="icon-eye"></i>
+            {{ article.views }}
+          </span>
+          <span class="meta-item">
+            <i class="icon-comment"></i>
+            {{ article.comments }}
+          </span>
+        </div>
+      </div>
+      <router-link :to="`/article/${article.id}`" class="read-more">
+        阅读全文
+        <i class="icon-arrow"></i>
+      </router-link>
+    </div>
+    <div class="article-hover-effects" v-if="hover">
+      <div class="hover-gradient"></div>
+      <div class="hover-content">
+        <router-link :to="`/article/${article.id}`" class="hover-read-more">
+          点击阅读
+        </router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'ArticleCard',
+  props: {
+    article: {
+      type: Object,
+      required: true
+    }
+  },
+  data() {
+    return {
+      hover: false
+    }
+  },
+  computed: {
+    tagColor() {
+      const tagColors = {
+        '开发日志': '#3498db',
+        '全新体验': '#2ecc71',
+        '教程文档': '#f39c12',
+        '纷繁杂谈': '#9b59b6',
+        '运维手记': '#e74c3c'
+      }
+      return tagColors[this.article.tag] || '#3498db'
+    }
+  }
+}
+</script>
+
+<style scoped>
+.article-card {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  position: relative;
+  cursor: pointer;
+}
+
+.article-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+}
+
+/* 文章头部 */
+.article-header {
+  position: relative;
+  height: 200px;
+  overflow: hidden;
+}
+
+.article-image {
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  transition: all 0.5s ease;
+}
+
+.article-card:hover .article-image {
+  transform: scale(1.1);
+  filter: brightness(0.7);
+}
+
+.article-tag {
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  padding: 6px 12px;
+  border-radius: 20px;
+  color: white;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  z-index: 2;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
+}
+
+/* 文章内容 */
+.article-content {
+  padding: 25px;
+  position: relative;
+  z-index: 3;
+  background: white;
+}
+
+.article-title {
+  margin: 0 0 15px 0;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.title-link {
+  color: #333;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+.title-link:hover {
+  color: #f39c12;
+}
+
+.article-excerpt {
+  margin: 0 0 20px 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: #666;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* 文章元数据 */
+.article-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding: 15px 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #eee;
+  font-size: 13px;
+  color: #888;
+}
+
+.meta-left, .meta-right {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 阅读更多按钮 */
+.read-more {
+  display: inline-block;
+  padding: 10px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.read-more:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+/* 悬停效果 */
+.article-hover-effects {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+
+.hover-gradient {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.8) 0%, rgba(118, 75, 162, 0.8) 100%);
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.article-card:hover .hover-gradient {
+  opacity: 1;
+}
+
+.hover-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  opacity: 0;
+  transition: all 0.3s ease 0.1s;
+}
+
+.article-card:hover .hover-content {
+  opacity: 1;
+}
+
+.hover-read-more {
+  display: inline-block;
+  padding: 15px 30px;
+  background: white;
+  color: #667eea;
+  text-decoration: none;
+  border-radius: 30px;
+  font-size: 16px;
+  font-weight: 700;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: all 0.3s ease;
+}
+
+.hover-read-more:hover {
+  transform: scale(1.05);
+}
+
+/* 图标样式 */
+[class^="icon-"] {
+  font-family: 'BlogIcons';
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+}
+
+.icon-date::before { content: '📅'; }
+.icon-tag::before { content: '🏷'; }
+.icon-eye::before { content: '👁'; }
+.icon-comment::before { content: '💬'; }
+.icon-arrow::before { content: '→'; }
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .article-card {
+    margin-bottom: 20px;
+  }
+  
+  .article-header {
+    height: 160px;
+  }
+  
+  .article-title {
+    font-size: 18px;
+  }
+  
+  .article-content {
+    padding: 20px;
+  }
+  
+  .article-meta {
+    flex-direction: column;
+    gap: 10px;
+    align-items: flex-start;
+  }
+}
+</style>

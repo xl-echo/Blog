@@ -1,83 +1,99 @@
 package com.echo.blog.service.impl;
 
-import com.echo.blog.config.handler.GlobalExceptionHandler;
-import com.echo.blog.config.result.Result;
-import com.echo.blog.config.result.StatusCode;
 import com.echo.blog.dao.UserDao;
-import com.echo.blog.dto.UserDto;
 import com.echo.blog.po.UserPo;
 import com.echo.blog.service.UserService;
-import com.echo.blog.utils.JwtTokenUtil;
-import com.echo.blog.utils.Md5Util;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ObjectUtils;
-
-import java.util.Date;
 
 /**
+ * 用户服务实现类
+ * 使用Spring Cache替代Redis
  * @author echo
- * @date 2020-01-30 15:42:50
  */
 @Service
 @RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService {
 
-    private static Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
-
     private final UserDao userDao;
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
-
+    /**
+     * 根据ID获取用户
+     * 使用Spring Cache缓存
+     * @param id 用户ID
+     * @return 用户信息
+     */
     @Override
-    public UserDto login(String username, String password) {
-
-        UserPo userPo = userDao.selectByUsername(username);
-        if(ObjectUtils.isEmpty(userPo)) {
-            throw new RuntimeException("用户名不存在！");
-        }
-        String md5Password = null;
-
-        try {
-            md5Password = Md5Util.encodeByMd5(password);
-        } catch (Exception e) {
-            LOGGER.error("md5解析错误!错误信息提示: {}",e.getMessage());
-            return null;
-        }
-        if(md5Password==null || !md5Password.equals(password)){
-            throw new RuntimeException("密码不正确！");
-        }
-        UserDto userDto = new UserDto();
-        userDto.setId(userPo.getId());
-        userDto.setUsername(userPo.getUsername());
-        userDto.setToken(JwtTokenUtil.generateToken(username));
-        return userDto;
+    @Cacheable(value = "users", key = "#id", unless = "#result == null")
+    public UserPo getUserById(Long id) {
+        return userDao.selectByPrimaryKey(id);
     }
 
+    /**
+     * 根据用户名获取用户
+     * 使用Spring Cache缓存
+     * @param username 用户名
+     * @return 用户信息
+     */
     @Override
-    public void register(UserPo userPo) {
-        UserPo userPo1 = userDao.selectByUsername(userPo.getUsername());
-        if(!ObjectUtils.isEmpty(userPo1)) {
-            throw new RuntimeException("用户名已经存在，请修改用户名！");
-        }
-        userPo.setCreateTime(new Date());
-        userPo.setUpdateTime(new Date());
-
-
-        String s = null;
-        try {
-            s = Md5Util.encodeByMd5(userPo.getPassword());
-        } catch (Exception e) {
-            LOGGER.error("md5解析错误!错误信息提示: {}",e.getMessage());
-            return;
-        }
-        userPo.setPassword(s);
-        userDao.insert(userPo);
-
-
+    @Cacheable(value = "users", key = "'username:' + #username", unless = "#result == null")
+    public UserPo getUserByUsername(String username) {
+        return userDao.selectByUsername(username);
     }
 
+    /**
+     * 创建用户
+     * @param user 用户信息
+     * @return 创建的用户
+     */
+    @Override
+    @CachePut(value = "users", key = "#result.id")
+    public UserPo createUser(UserPo user) {
+        userDao.insert(user);
+        return user;
+    }
+
+    /**
+     * 更新用户
+     * @param user 用户信息
+     * @return 更新后的用户
+     */
+    @Override
+    @CachePut(value = "users", key = "#user.id")
+    public UserPo updateUser(UserPo user) {
+        userDao.updateByPrimaryKey(user);
+        return user;
+    }
+
+    /**
+     * 删除用户
+     * @param id 用户ID
+     */
+    @Override
+    @CacheEvict(value = "users", key = "#id")
+    public void deleteUser(Long id) {
+        userDao.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 检查用户名是否存在
+     * @param username 用户名
+     * @return 是否存在
+     */
+    @Override
+    public boolean existsByUsername(String username) {
+        return userDao.existsByUsername(username) > 0;
+    }
+
+    /**
+     * 清空所有用户缓存
+     */
+    @CacheEvict(value = "users", allEntries = true)
+    public void clearAllUserCache() {
+        // 清空缓存
+    }
 }

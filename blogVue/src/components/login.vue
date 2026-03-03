@@ -2,10 +2,13 @@
   <div class="login" style="position:absolute;top:35%;left:50%;transform: translate(-50%,-50%);">
     <Col align="center">
       <h1>
-        注册登录
+        欢迎登录博客系统
       </h1>
+      <p style="color: #666; margin-bottom: 20px;">
+        首次登录将自动创建账号，登录后可发布文章、点赞和评论
+      </p>
     </Col>
-    <Card align="center" style="height: 240px;line-height: 240px;width: 450px">
+    <Card align="center" style="height: 280px;line-height: 280px;width: 450px">
       <Form ref="userInfo" :model="userInfo" :rules="userInfoRules">
         <FormItem prop="username">
           <Input type="text" v-model="userInfo.username" placeholder="请输入用户名"><span slot="prepend"><Icon :size="16"
@@ -61,6 +64,7 @@
                 localStorage.setItem("token", res.data.data.token);
                 localStorage.setItem("username", res.data.data.username);
                 localStorage.setItem("authorId", res.data.data.id);
+                this.$Message.success('登录成功！');
                 this.$router.push('/')
               }
             });
