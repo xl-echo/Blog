@@ -3,7 +3,6 @@ package com.echo.blog.controller;
 import com.echo.blog.config.result.Result;
 import com.echo.blog.po.ProductPo;
 import com.echo.blog.service.ProductService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -15,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
  **/
 @RestController
 @RequestMapping("/productController")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProductController {
 
-    private final ProductService productService;
+    @Autowired
+    private ProductService productService;
 
     /**
      * 获取产品信息
@@ -47,3 +46,5 @@ public class ProductController {
     }
 
 }
+
+

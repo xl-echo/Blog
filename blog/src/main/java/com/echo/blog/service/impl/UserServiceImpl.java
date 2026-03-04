@@ -1,25 +1,23 @@
 package com.echo.blog.service.impl;
 
 import com.echo.blog.dao.UserDao;
+import com.echo.blog.dto.UserDto;
 import com.echo.blog.po.UserPo;
 import com.echo.blog.service.UserService;
-import lombok.RequiredArgsConstructor;
+import com.echo.blog.utils.JwtTokenUtil;
+import com.echo.blog.utils.Md5Util;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 /**
  * 用户服务实现类
- * 使用Spring Cache替代Redis
  * @author echo
  */
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserServiceImpl implements UserService {
 
-    private final UserDao userDao;
+    @Autowired
+    private UserDao userDao;
 
     /**
      * 根据ID获取用户
@@ -28,7 +26,6 @@ public class UserServiceImpl implements UserService {
      * @return 用户信息
      */
     @Override
-    @Cacheable(value = "users", key = "#id", unless = "#result == null")
     public UserPo getUserById(Long id) {
         return userDao.selectByPrimaryKey(id);
     }
@@ -40,7 +37,6 @@ public class UserServiceImpl implements UserService {
      * @return 用户信息
      */
     @Override
-    @Cacheable(value = "users", key = "'username:' + #username", unless = "#result == null")
     public UserPo getUserByUsername(String username) {
         return userDao.selectByUsername(username);
     }
@@ -51,7 +47,6 @@ public class UserServiceImpl implements UserService {
      * @return 创建的用户
      */
     @Override
-    @CachePut(value = "users", key = "#result.id")
     public UserPo createUser(UserPo user) {
         userDao.insert(user);
         return user;
@@ -63,7 +58,6 @@ public class UserServiceImpl implements UserService {
      * @return 更新后的用户
      */
     @Override
-    @CachePut(value = "users", key = "#user.id")
     public UserPo updateUser(UserPo user) {
         userDao.updateByPrimaryKey(user);
         return user;
@@ -74,7 +68,6 @@ public class UserServiceImpl implements UserService {
      * @param id 用户ID
      */
     @Override
-    @CacheEvict(value = "users", key = "#id")
     public void deleteUser(Long id) {
         userDao.deleteByPrimaryKey(id);
     }
@@ -92,8 +85,57 @@ public class UserServiceImpl implements UserService {
     /**
      * 清空所有用户缓存
      */
-    @CacheEvict(value = "users", allEntries = true)
-    public void clearAllUserCache() {
-        // 清空缓存
+    public void clearAll$1Cache() { }
+
+    /**
+     * 用户登录
+     */
+    @Override
+    public UserDto login(String username, String password) {
+        // 查询用户
+        UserPo user = userDao.selectByUsername(username);
+        if (user == null) {
+            throw new RuntimeException("用户不存在");
+        }
+
+        // 验证密码
+        String encryptedPassword = Md5Util.encrypt(password);
+        if (!encryptedPassword.equals(user.getPassword())) {
+            throw new RuntimeException("密码错误");
+        }
+
+        // 生成token
+        String token = JwtTokenUtil.generateToken(username);
+
+        // 构造返回对象
+        UserDto userDto = new UserDto();
+        userDto.setId(user.getId());
+        userDto.setUsername(user.getUsername());
+        userDto.setNickname(user.getNickname());
+        userDto.setToken(token);
+
+        return userDto;
+    }
+
+    /**
+     * 用户注册
+     */
+    @Override
+    public void register(UserPo userPo) {
+        // 检查用户名是否已存在
+        if (existsByUsername(userPo.getUsername())) {
+            throw new RuntimeException("用户名已存在");
+        }
+
+        // 加密密码
+        userPo.setPassword(Md5Util.encrypt(userPo.getPassword()));
+
+        // 保存用户
+        userDao.insert(userPo);
     }
 }
+
+
+
+
+

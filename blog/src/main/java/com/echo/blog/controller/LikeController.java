@@ -1,9 +1,8 @@
 package com.echo.blog.controller;
 
 import com.echo.blog.config.result.Result;
-;
 import com.echo.blog.service.LikeService;
-import lombok.RequiredArgsConstructor;
+import com.echo.blog.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -13,10 +12,10 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/likeController")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class LikeController {
 
-    private final LikeService likeService;
+    @Autowired
+    private LikeService likeService;
 
     /**
      * 点赞文章（需要登录）
@@ -27,16 +26,16 @@ public class LikeController {
                                        @RequestParam(value = "username") String username,
                                        @RequestParam(value = "token") String token) {
         Result<String> result = new Result<>();
-        
+
         // 验证token
         try {
-            com.echo.blog.utils.JwtTokenUtil.verifyToken(token);
+            JwtTokenUtil.verifyToken(token);
         } catch (Exception e) {
             result.setStatus(999);
             result.setMessage("请先登录后再点赞");
             return result;
         }
-        
+
         String response = likeService.likeArticle(articleId, userId, username);
         Result.packageResultMethod(result, response);
         return result;
@@ -50,16 +49,16 @@ public class LikeController {
                                          @RequestParam(value = "userId") Long userId,
                                          @RequestParam(value = "token") String token) {
         Result<String> result = new Result<>();
-        
+
         // 验证token
         try {
-            com.echo.blog.utils.JwtTokenUtil.verifyToken(token);
+            JwtTokenUtil.verifyToken(token);
         } catch (Exception e) {
             result.setStatus(999);
             result.setMessage("请先登录后再取消点赞");
             return result;
         }
-        
+
         String response = likeService.unlikeArticle(articleId, userId);
         Result.packageResultMethod(result, response);
         return result;
@@ -88,3 +87,5 @@ public class LikeController {
         return result;
     }
 }
+
+

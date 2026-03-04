@@ -1,27 +1,23 @@
 package com.echo.blog.service.impl;
 
 import com.echo.blog.dao.OrderDao;
+import com.echo.blog.dto.OrderDto;
 import com.echo.blog.po.OrderPo;
 import com.echo.blog.service.OrderService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * 订单服务实现类
- * 使用Spring Cache替代Redis
  * @author echo
  */
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class OrderServiceImpl implements OrderService {
 
-    private final OrderDao orderDao;
+    @Autowired
+    private OrderDao orderDao;
 
     /**
      * 根据ID获取订单
@@ -30,7 +26,6 @@ public class OrderServiceImpl implements OrderService {
      * @return 订单信息
      */
     @Override
-    @Cacheable(value = "orders", key = "#id", unless = "#result == null")
     public OrderPo getOrderById(Long id) {
         return orderDao.selectByPrimaryKey(id);
     }
@@ -41,7 +36,6 @@ public class OrderServiceImpl implements OrderService {
      * @return 订单列表
      */
     @Override
-    @Cacheable(value = "orders", key = "'all'")
     public List<OrderPo> getAllOrders() {
         return orderDao.selectAll();
     }
@@ -52,7 +46,6 @@ public class OrderServiceImpl implements OrderService {
      * @return 创建的订单
      */
     @Override
-    @CachePut(value = "orders", key = "#result.id")
     public OrderPo createOrder(OrderPo order) {
         orderDao.insert(order);
         return order;
@@ -64,7 +57,6 @@ public class OrderServiceImpl implements OrderService {
      * @return 更新后的订单
      */
     @Override
-    @CachePut(value = "orders", key = "#order.id")
     public OrderPo updateOrder(OrderPo order) {
         orderDao.updateByPrimaryKey(order);
         return order;
@@ -75,7 +67,6 @@ public class OrderServiceImpl implements OrderService {
      * @param id 订单ID
      */
     @Override
-    @CacheEvict(value = "orders", key = "#id")
     public void deleteOrder(Long id) {
         orderDao.deleteByPrimaryKey(id);
     }
@@ -87,7 +78,6 @@ public class OrderServiceImpl implements OrderService {
      * @return 订单列表
      */
     @Override
-    @Cacheable(value = "orders", key = "'user:' + #userId")
     public List<OrderPo> getOrdersByUserId(Long userId) {
         return orderDao.selectByUserId(userId);
     }
@@ -95,8 +85,27 @@ public class OrderServiceImpl implements OrderService {
     /**
      * 清空所有订单缓存
      */
-    @CacheEvict(value = "orders", allEntries = true)
-    public void clearAllOrderCache() {
-        // 清空缓存
+    public void clearAll$1Cache() { }
+
+    /**
+     * 保存订单（兼容Controller调用）
+     */
+    @Override
+    public String save(OrderPo orderPo) {
+        createOrder(orderPo);
+        return "保存成功";
+    }
+
+    /**
+     * 分页获取订单列表（兼容Controller调用）
+     */
+    @Override
+    public OrderDto getList(Integer page, Integer size) {
+        return orderDao.selectByPage(page, size);
     }
 }
+
+
+
+
+

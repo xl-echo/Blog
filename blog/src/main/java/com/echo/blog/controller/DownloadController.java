@@ -1,14 +1,12 @@
 package com.echo.blog.controller;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.bind.annotation.*;
 
-import javax.activation.MimetypesFileTypeMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.net.URLConnection;
 
 /**
  * @author echo
@@ -16,7 +14,6 @@ import java.io.*;
  **/
 @RestController
 @RequestMapping("/downloadController")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class DownloadController {
 
     /**
@@ -45,7 +42,13 @@ public class DownloadController {
         resp.reset();
         resp.setHeader("Accept-Ranges", "byte");
         String range = req.getHeader("Range");
-        String mtype = new MimetypesFileTypeMap().getContentType(fileName);
+        
+        // 使用URLConnection替代MimetypesFileTypeMap
+        String mtype = URLConnection.guessContentTypeFromName(fileName);
+        if (mtype == null) {
+            mtype = "application/pdf";
+        }
+        
         resp.setHeader("Content-Type", mtype);
         resp.setHeader("Content-Length", new Long(length).toString());
         if (range != null) {
@@ -76,3 +79,5 @@ public class DownloadController {
     }
 
 }
+
+

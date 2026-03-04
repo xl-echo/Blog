@@ -65,4 +65,30 @@ public class ArticlePo implements Serializable {
      */
     private String content;
 
+    /**
+     * 阅读量
+     */
+    private Long views;
+
+    /**
+     * 点赞数
+     */
+    private Long likes;
+
+    /**
+     * 分类ID
+     */
+    private Long categoryId;
+
+    /**
+     * 标签
+     */
+    private String tags;
+
+    /**
+     * 作者名称（用于显示）
+     */
+    private String authorName;
 }
+
+

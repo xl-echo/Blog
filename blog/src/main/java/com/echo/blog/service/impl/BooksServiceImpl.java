@@ -3,7 +3,6 @@ package com.echo.blog.service.impl;
 import com.echo.blog.dao.BooksDao;
 import com.echo.blog.po.BooksPo;
 import com.echo.blog.service.BooksService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +13,10 @@ import java.util.List;
  * @date 2020/2/7 15:27
  **/
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BooksServiceImpl implements BooksService {
 
-    private final BooksDao booksDao;
+    @Autowired
+    private BooksDao booksDao;
 
     @Override
     public List<BooksPo> getList() {
@@ -25,3 +24,8 @@ public class BooksServiceImpl implements BooksService {
     }
 
 }
+
+
+
+
+

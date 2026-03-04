@@ -1,15 +1,1 @@
-<template>
-  <div>
-    userInfo
-  </div>
-</template>
-
-<script>
-    export default {
-        name: "userDetail"
-    }
-</script>
-
-<style scoped>
-
-</style>
+﻿<template><div class="container">  <div>    userInfo  </div></div></template><script>export default {  name: 'userDetail'}</script><style scoped></style>

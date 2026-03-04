@@ -26,3 +26,4 @@ public interface ProjectCollectionDao {
     List<ProjectCollectionPo> getList();
 
 }
+

@@ -6,63 +6,111 @@ import com.echo.blog.po.ArticlePo;
 import java.util.List;
 
 /**
+ * 文章服务接口
  * @author echo
- * @date 2020-01-19 21:31:56
  */
 public interface ArticleService {
 
     /**
-     * 项目健康监测方法
-     *
-     * @return String
+     * 根据ID获取文章
+     * @param id 文章ID
+     * @return 文章信息
+     */
+    ArticlePo getArticleById(Long id);
+
+    /**
+     * 获取所有文章
+     * @return 文章列表
+     */
+    List<ArticlePo> getAllArticles();
+
+    /**
+     * 获取热门文章
+     * @return 热门文章列表
+     */
+    List<ArticlePo> getHotArticles();
+
+    /**
+     * 创建文章
+     * @param article 文章信息
+     * @return 创建的文章
+     */
+    ArticlePo createArticle(ArticlePo article);
+
+    /**
+     * 更新文章
+     * @param article 文章信息
+     * @return 更新后的文章
+     */
+    ArticlePo updateArticle(ArticlePo article);
+
+    /**
+     * 删除文章
+     * @param id 文章ID
+     */
+    void deleteArticle(Long id);
+
+    /**
+     * 按分类获取文章
+     * @param categoryId 分类ID
+     * @return 文章列表
+     */
+    List<ArticlePo> getArticlesByCategory(Long categoryId);
+
+    /**
+     * 按标签获取文章
+     * @param tagId 标签ID
+     * @return 文章列表
+     */
+    List<ArticlePo> getArticlesByTag(Long tagId);
+
+    /**
+     * 测试方法
+     * @return 测试结果
      */
     String test();
 
     /**
-     * 添加一篇文章
-     *
-     * @param articleParam 文章内容
-     * @return String
+     * 保存文章
+     * @param articleParam 文章参数
+     * @return 保存结果
      */
     String save(ArticleParam articleParam);
 
     /**
-     * 根据id删除一篇文章
-     *
-     * @param id 文章id
-     * @return String
+     * 删除文章
+     * @param id 文章ID
+     * @return 删除结果
      */
     String delete(Long id);
 
     /**
-     * 根据id修改一篇文章
-     *
-     * @param articlePo 文章id
-     * @return String
+     * 更新文章
+     * @param articlePo 文章对象
+     * @return 更新结果
      */
     String update(ArticlePo articlePo);
 
     /**
-     * 分页查询文章
-     *
-     * @param articleParam 查询条件
-     * @return List<ArticlePo>
+     * 分页获取文章列表
+     * @param articleParam 查询参数
+     * @return 文章列表
      */
     List<ArticlePo> getList(ArticleParam articleParam);
 
     /**
-     * 根据文章id获取文章详情
-     *
-     * @param articleId 文章id
-     * @return ArticlePo
-     */
-    ArticlePo getDetail(Integer articleId);
-
-    /**
-     * 查询5条热门文章
-     *
-     * @return List<ArticlePo>
+     * 获取热门文章列表
+     * @return 热门文章列表
      */
     List<ArticlePo> getHotList();
 
+    /**
+     * 获取文章详情
+     * @param articleId 文章ID
+     * @return 文章详情
+     */
+    ArticlePo getDetail(Integer articleId);
 }
+
+
+

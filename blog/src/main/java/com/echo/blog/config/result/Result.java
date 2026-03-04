@@ -45,3 +45,5 @@ public class Result<T> implements Serializable {
         result.setData(t);
     }
 }
+
+

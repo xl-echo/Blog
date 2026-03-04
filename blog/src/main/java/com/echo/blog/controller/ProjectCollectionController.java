@@ -3,7 +3,6 @@ package com.echo.blog.controller;
 import com.echo.blog.config.result.Result;
 import com.echo.blog.po.ProjectCollectionPo;
 import com.echo.blog.service.ProjectCollectionService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,10 +17,10 @@ import java.util.List;
  **/
 @RestController
 @RequestMapping("/projectCollectionController")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProjectCollectionController {
 
-    private final ProjectCollectionService projectCollectionService;
+    @Autowired
+    private ProjectCollectionService projectCollectionService;
 
     /**
      * 查询所有项目列表
@@ -50,3 +49,5 @@ public class ProjectCollectionController {
     }
 
 }
+
+

@@ -18,6 +18,13 @@ public interface ArticleDao {
      */
     List<ArticlePo> getAll();
 
+    /**
+     * 查询所有文章（用于缓存）
+     *
+     * @return List<ArticlePo>
+     */
+    List<ArticlePo> selectAll();
+
     int deleteByPrimaryKey(Long id);
 
     /**
@@ -47,6 +54,14 @@ public interface ArticleDao {
     List<ArticlePo> getList(ArticleParam articleParam);
 
     /**
+     * 分页查询（用于缓存）
+     *
+     * @param articleParam 查询条件
+     * @return List<ArticlePo>
+     */
+    List<ArticlePo> selectByPage(ArticleParam articleParam);
+
+    /**
      * 根据文章id获取文章详情
      *
      * @param articleId 文章id
@@ -61,4 +76,28 @@ public interface ArticleDao {
      */
     List<ArticlePo> getHotList();
 
+    /**
+     * 查询热门文章（用于缓存）
+     *
+     * @return List<ArticlePo>
+     */
+    List<ArticlePo> selectHotArticles();
+
+    /**
+     * 根据分类ID查询文章
+     *
+     * @param categoryId 分类ID
+     * @return List<ArticlePo>
+     */
+    List<ArticlePo> selectByCategoryId(Long categoryId);
+
+    /**
+     * 根据标签ID查询文章
+     *
+     * @param tagId 标签ID
+     * @return List<ArticlePo>
+     */
+    List<ArticlePo> selectByTagId(Long tagId);
 }
+
+

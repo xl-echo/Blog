@@ -10,30 +10,57 @@
         <result column="product_number" jdbcType="BIGINT" property="productNumber"/>
         <result column="create_time" jdbcType="TIMESTAMP" property="createTime"/>
         <result column="update_time" jdbcType="TIMESTAMP" property="updateTime"/>
+        <result column="category_id" jdbcType="BIGINT" property="categoryId"/>
     </resultMap>
+
     <sql id="Base_Column_List">
     id, product_name, product_desc, product_price, product_img, product_number, create_time, 
-    update_time
+    update_time, category_id
   </sql>
+
     <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from product
         where id = #{id,jdbcType=BIGINT}
     </select>
+
+    <select id="selectAll" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from product
+    </select>
+
+    <select id="selectByCategoryId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from product
+        where category_id = #{categoryId,jdbcType=BIGINT}
+    </select>
+
+    <select id="searchByKeyword" parameterType="java.lang.String" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from product
+        where product_name like CONCAT('%', #{keyword,jdbcType=VARCHAR}, '%')
+        or product_desc like CONCAT('%', #{keyword,jdbcType=VARCHAR}, '%')
+    </select>
+
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
     delete from product
     where id = #{id,jdbcType=BIGINT}
   </delete>
+
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.echo.blog.po.ProductPo"
             useGeneratedKeys="true">
     insert into product (product_name, product_desc, product_price,
       product_img, product_number, create_time,
-      update_time)
+      update_time, category_id)
     values (#{productName,jdbcType=VARCHAR}, #{productDesc,jdbcType=VARCHAR}, #{productPrice,jdbcType=DECIMAL},
       #{productImg,jdbcType=VARCHAR}, #{productNumber,jdbcType=BIGINT}, #{createTime,jdbcType=TIMESTAMP},
-      #{updateTime,jdbcType=TIMESTAMP})
+      #{updateTime,jdbcType=TIMESTAMP}, #{categoryId,jdbcType=BIGINT})
   </insert>
+
     <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.echo.blog.po.ProductPo"
             useGeneratedKeys="true">
         insert into product
@@ -59,6 +86,9 @@
             <if test="updateTime != null">
                 update_time,
             </if>
+            <if test="categoryId != null">
+                category_id,
+            </if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="productName != null">
@@ -82,8 +112,12 @@
             <if test="updateTime != null">
                 #{updateTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="categoryId != null">
+                #{categoryId,jdbcType=BIGINT},
+            </if>
         </trim>
     </insert>
+
     <update id="updateByPrimaryKeySelective" parameterType="com.echo.blog.po.ProductPo">
         update product
         <set>
@@ -108,9 +142,13 @@
             <if test="updateTime != null">
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
             </if>
+            <if test="categoryId != null">
+                category_id = #{categoryId,jdbcType=BIGINT},
+            </if>
         </set>
         where id = #{id,jdbcType=BIGINT}
     </update>
+
     <update id="updateByPrimaryKey" parameterType="com.echo.blog.po.ProductPo">
     update product
     set product_name = #{productName,jdbcType=VARCHAR},
@@ -119,7 +157,10 @@
       product_img = #{productImg,jdbcType=VARCHAR},
       product_number = #{productNumber,jdbcType=BIGINT},
       create_time = #{createTime,jdbcType=TIMESTAMP},
-      update_time = #{updateTime,jdbcType=TIMESTAMP}
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      category_id = #{categoryId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
+
+

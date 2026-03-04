@@ -36,22 +36,18 @@ public class GlobalExceptionHandler {
 
     /**
      * 其他错误
-     *
      * @param ex 错误
      * @return Result<String>
      */
     @ExceptionHandler({Exception.class})
-    public Result<String> exception(Exception ex) {
-        return resultFormat(StatusCode.ERROR_.getCode(), ex);
-    }
-
-    private <T extends Throwable> Result<String> resultFormat(Integer code, T ex) {
-        ex.printStackTrace();
-        log.error(String.format(LOG_EXCEPTION_FORMAT, code, ex.getMessage()));
+    public Result<String> exception(Exception ex){
+        log.error(String.format(LOG_EXCEPTION_FORMAT, StatusCode.ERROR.getCode(), ex.getMessage()));
         Result<String> result = new Result<>();
-        result.setStatus(StatusCode.ERROR_.getCode());
-        result.setMessage("服务器貌似开小差了，请您联系我们的开发小哥哥催一催服务器工作！");
+        result.setStatus(StatusCode.ERROR.getCode());
+        result.setMessage(ex.getMessage());
         return result;
     }
 
 }
+
+

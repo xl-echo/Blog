@@ -51,5 +51,12 @@ public class ProductPo implements Serializable {
      */
     private Date updateTime;
 
+    /**
+     * 分类ID
+     */
+    private Long categoryId;
+
     private static final long serialVersionUID = 1L;
 }
+
+

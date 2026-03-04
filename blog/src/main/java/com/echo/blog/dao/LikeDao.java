@@ -31,3 +31,5 @@ public interface LikeDao {
      */
     int countByArticleId(@Param("articleId") Long articleId);
 }
+
+

@@ -4,7 +4,6 @@ import com.echo.blog.config.result.Result;
 import com.echo.blog.dto.OrderDto;
 import com.echo.blog.po.OrderPo;
 import com.echo.blog.service.OrderService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,10 +13,10 @@ import org.springframework.web.bind.annotation.*;
  **/
 @RestController
 @RequestMapping("/orderController")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class OrderController {
 
-    private final OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
     /**
      * 新增订单
@@ -47,3 +46,5 @@ public class OrderController {
     }
 
 }
+
+

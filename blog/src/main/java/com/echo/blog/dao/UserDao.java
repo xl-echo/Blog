@@ -27,4 +27,14 @@ public interface UserDao {
      * @return UserPo
      */
     UserPo selectByUsername(@Param("username") String username);
+
+    /**
+     * 检查用户名是否存在
+     *
+     * @param username 用户名
+     * @return 存在的数量
+     */
+    int existsByUsername(@Param("username") String username);
 }
+
+

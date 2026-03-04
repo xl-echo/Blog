@@ -1,15 +1,1 @@
-<template>
-  <div>
-    已发布博客
-  </div>
-</template>
-
-<script>
-    export default {
-        name: "release"
-    }
-</script>
-
-<style scoped>
-
-</style>
+﻿<template><div class="container">  <div>    已发布博客  </div></div></template><script>export default {  name: 'release'}</script><style scoped></style>

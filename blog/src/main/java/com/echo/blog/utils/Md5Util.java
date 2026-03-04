@@ -20,6 +20,19 @@ public final class Md5Util {
         //注意：MessageDigest只能将String转成byte[]，接下来的事情，由我们程序员来完成
         return byteArrayToHexString(byteArray);
     }
+    
+    /**
+     * 将明文密码转成MD5密码（兼容Controller调用）
+     */
+    public static String encrypt(String password) {
+        try {
+            return encodeByMd5(password);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return password;
+        }
+    }
+    
     /**
      * 将byte[]转在16进制字符串
      */
@@ -58,4 +71,5 @@ public final class Md5Util {
      * 测试
      */
 }
+
 

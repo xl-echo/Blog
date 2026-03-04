@@ -3,7 +3,6 @@ package com.echo.blog.service.impl;
 import com.echo.blog.dao.ProjectCollectionDao;
 import com.echo.blog.po.ProjectCollectionPo;
 import com.echo.blog.service.ProjectCollectionService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,10 +13,10 @@ import java.util.List;
  * @date 2020/2/14 22:00
  **/
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProjectCollectionServiceImpl implements ProjectCollectionService {
 
-    private final ProjectCollectionDao projectCollectionDao;
+    @Autowired
+    private ProjectCollectionDao projectCollectionDao;
 
     @Override
     public List<ProjectCollectionPo> getList() {
@@ -30,3 +29,8 @@ public class ProjectCollectionServiceImpl implements ProjectCollectionService {
     }
 
 }
+
+
+
+
+

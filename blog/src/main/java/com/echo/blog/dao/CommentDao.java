@@ -16,12 +16,29 @@ public interface CommentDao {
     int insert(CommentPo comment);
 
     /**
+     * 根据ID查询评论
+     */
+    CommentPo selectById(@Param("id") Long id);
+
+    /**
+     * 查询所有评论
+     */
+    List<CommentPo> selectAll();
+
+    /**
      * 根据文章id获取评论列表
      */
     List<CommentPo> selectByArticleId(@Param("articleId") Long articleId);
+
+    /**
+     * 更新评论
+     */
+    int updateById(CommentPo comment);
 
     /**
      * 删除评论
      */
     int deleteById(@Param("id") Long id);
 }
+
+

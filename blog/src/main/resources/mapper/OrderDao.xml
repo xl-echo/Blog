@@ -9,34 +9,72 @@
     <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
   </resultMap>
+
+  <resultMap id="OrderDtoResultMap" type="com.echo.blog.dto.OrderDto">
+    <id column="id" jdbcType="BIGINT" property="id" />
+    <result column="product_id" jdbcType="BIGINT" property="productId" />
+    <result column="user_id" jdbcType="BIGINT" property="userId" />
+    <result column="address" jdbcType="VARCHAR" property="address" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
+    <result column="total" jdbcType="INTEGER" property="total" />
+  </resultMap>
+
   <sql id="Base_Column_List">
     id, product_id, user_id, address, create_time, update_time
   </sql>
+
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select
     <include refid="Base_Column_List" />
-    from order
+    from `order`
     where id = #{id,jdbcType=BIGINT}
   </select>
+
   <select id="getList" resultMap="BaseResultMap" parameterType="java.util.Map">
     select
     <include refid="Base_Column_List" />
     from `order`
     limit #{page,jdbcType=INTEGER}, #{size,jdbcType=INTEGER}
   </select>
-    <select id="getTotal" resultType="java.lang.Integer" parameterType="java.util.Map">
-      select count(*) from `order`
-    </select>
-    <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
-    delete from order
+
+  <select id="getTotal" resultType="java.lang.Integer" parameterType="java.util.Map">
+    select count(*) from `order`
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `order`
+  </select>
+
+  <select id="selectByUserId" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from `order`
+    where user_id = #{userId,jdbcType=BIGINT}
+  </select>
+
+  <select id="selectByPage" resultMap="OrderDtoResultMap">
+    select
+    <include refid="Base_Column_List" />,
+    (select count(*) from `order`) as total
+    from `order`
+    limit #{page,jdbcType=INTEGER}, #{size,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+    delete from `order`
     where id = #{id,jdbcType=BIGINT}
   </delete>
+
   <insert id="insert" parameterType="com.echo.blog.po.OrderPo">
     insert into `order` (product_id, user_id, address,create_time, update_time)
     values (#{productId,jdbcType=BIGINT}, #{userId,jdbcType=BIGINT}, #{address,jdbcType=VARCHAR},#{createTime,jdbcType=TIMESTAMP}, #{updateTime,jdbcType=TIMESTAMP})
   </insert>
+
   <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.echo.blog.po.OrderPo" useGeneratedKeys="true">
-    insert into order
+    insert into `order`
     <trim prefix="(" suffix=")" suffixOverrides=",">
       <if test="productId != null">
         product_id,
@@ -72,8 +110,9 @@
       </if>
     </trim>
   </insert>
+
   <update id="updateByPrimaryKeySelective" parameterType="com.echo.blog.po.OrderPo">
-    update order
+    update `order`
     <set>
       <if test="productId != null">
         product_id = #{productId,jdbcType=BIGINT},
@@ -93,8 +132,9 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
+
   <update id="updateByPrimaryKey" parameterType="com.echo.blog.po.OrderPo">
-    update order
+    update `order`
     set product_id = #{productId,jdbcType=BIGINT},
       user_id = #{userId,jdbcType=BIGINT},
       address = #{address,jdbcType=VARCHAR},
@@ -103,3 +143,5 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 </mapper>
+
+

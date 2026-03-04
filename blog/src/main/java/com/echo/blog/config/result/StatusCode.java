@@ -22,7 +22,9 @@ public enum StatusCode {
     ERROR_(999, "自定义服务器内部错误编码"),
     FAIL(1000, "自定义异常");
 
-    private int code;
-    private String msg;
+    private final int code;
+    private final String msg;
 
 }
+
+

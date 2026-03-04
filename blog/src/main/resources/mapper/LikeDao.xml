@@ -29,3 +29,5 @@
     select count(*) from `like` where article_id = #{articleId}
   </select>
 </mapper>
+
+

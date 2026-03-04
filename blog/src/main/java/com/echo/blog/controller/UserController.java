@@ -4,10 +4,7 @@ import com.echo.blog.config.result.Result;
 import com.echo.blog.dto.UserDto;
 import com.echo.blog.po.UserPo;
 import com.echo.blog.service.UserService;
-import com.echo.blog.utils.JwtTokenUtil;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,10 +14,10 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping("/userController")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class UserController {
 
-    private final UserService userService;
+    @Autowired
+    private UserService userService;
 
     /**
      * 用户登录
@@ -50,3 +47,5 @@ public class UserController {
     }
 
 }
+
+

@@ -3,7 +3,6 @@ package com.echo.blog.controller;
 import com.echo.blog.config.result.Result;
 import com.echo.blog.po.BooksPo;
 import com.echo.blog.service.BooksService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -17,10 +16,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/booksController")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class BooksController {
 
-    private final BooksService booksService;
+    @Autowired
+    private BooksService booksService;
 
     /**
      * 获取书籍列表
@@ -36,3 +35,5 @@ public class BooksController {
     }
 
 }
+
+

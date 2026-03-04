@@ -41,7 +41,7 @@ public class CyclicBarrierController {
         CyclicBarrier cyclicBarrier = new CyclicBarrier(THREAD_NUM);
         ExecutorService executorService = Executors.newFixedThreadPool(THREAD_NUM);
         for (int i = 0; i < THREAD_NUM; i++) {
-            executorService.execute(new CyclicBarrierController().new MyThread(orderService, orderPo, cyclicBarrier));
+            executorService.execute(new MyThread(orderService, orderPo, cyclicBarrier));
         }
         executorService.shutdown();
         Result.packageResultMethod(result, "success");
@@ -49,8 +49,11 @@ public class CyclicBarrierController {
     }
 
     public class MyThread implements Runnable {
+
         private OrderPo orderPo;
+
         private OrderService orderService;
+
         private CyclicBarrier cyclicBarrier;
 
         public MyThread(OrderService orderService, OrderPo orderPo, CyclicBarrier cyclicBarrier) {
@@ -72,3 +75,5 @@ public class CyclicBarrierController {
     }
 
 }
+
+

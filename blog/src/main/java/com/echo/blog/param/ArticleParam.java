@@ -31,7 +31,7 @@ public class ArticleParam {
     private Long clicks;
 
     /**
-     * 作者id
+    * 作者id
      */
     private Long authorId;
 
@@ -39,6 +39,11 @@ public class ArticleParam {
      * 作者
      */
     private String author;
+
+    /**
+     * 作者名称
+     */
+    private String authorName;
 
     /**
      * 是否是原创 0:原创 1:转载 2:翻译
@@ -69,6 +74,28 @@ public class ArticleParam {
 
     private Integer size;
 
+    /**
+     * 页码（用于分页）
+     */
+    private Integer pageNum;
+
+    /**
+     * 每页大小（用于分页）
+     */
+    private Integer pageSize;
+
+    /**
+     * 分类ID
+     */
+    private Long categoryId;
+
+    /**
+     * 标签
+     */
+    private String tags;
+
     private static final long serialVersionUID = 1L;
 
 }
+
+

@@ -37,6 +37,11 @@ public class UserPo implements Serializable {
     private String phone;
 
     /**
+     * 昵称
+     */
+    private String nickname;
+
+    /**
      * 创建时间
      */
     private Date createTime;
@@ -47,3 +52,5 @@ public class UserPo implements Serializable {
     private Date updateTime;
 
 }
+
+

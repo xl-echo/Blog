@@ -1,8 +1,8 @@
 package com.echo.blog;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -11,10 +11,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
  * 启用Spring Cache和事务管理
  * @author echo
  */
-@SpringBootApplication
-@EnableCaching
+@SpringBootApplication(exclude = {org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration.class, org.springframework.boot.autoconfigure.data.redis.RedisReactiveAutoConfiguration.class})
 @EnableTransactionManagement
 @ComponentScan(basePackages = "com.echo.blog")
+@MapperScan(basePackages = "com.echo.blog.dao")
 public class BlogApplication {
 
     public static void main(String[] args) {
@@ -26,3 +26,7 @@ public class BlogApplication {
         System.out.println("========================================");
     }
 }
+
+
+
+

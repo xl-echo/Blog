@@ -1,13 +1,1 @@
-<template>
-    <div>点击量</div>
-</template>
-
-<script>
-    export default {
-        name: "clickNumber"
-    }
-</script>
-
-<style scoped>
-
-</style>
+﻿<template><div class="container">    <div>点击量</div></div></template><script>export default {  name: 'clickNumber'}</script><style scoped></style>

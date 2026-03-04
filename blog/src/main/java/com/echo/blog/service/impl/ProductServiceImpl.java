@@ -3,25 +3,20 @@ package com.echo.blog.service.impl;
 import com.echo.blog.dao.ProductDao;
 import com.echo.blog.po.ProductPo;
 import com.echo.blog.service.ProductService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * 产品服务实现类
- * 使用Spring Cache替代Redis
  * @author echo
  */
 @Service
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductDao productDao;
+    @Autowired
+    private ProductDao productDao;
 
     /**
      * 根据ID获取产品
@@ -30,7 +25,6 @@ public class ProductServiceImpl implements ProductService {
      * @return 产品信息
      */
     @Override
-    @Cacheable(value = "products", key = "#id", unless = "#result == null")
     public ProductPo getProductById(Long id) {
         return productDao.selectByPrimaryKey(id);
     }
@@ -41,7 +35,6 @@ public class ProductServiceImpl implements ProductService {
      * @return 产品列表
      */
     @Override
-    @Cacheable(value = "products", key = "'all'")
     public List<ProductPo> getAllProducts() {
         return productDao.selectAll();
     }
@@ -52,7 +45,6 @@ public class ProductServiceImpl implements ProductService {
      * @return 创建的产品
      */
     @Override
-    @CachePut(value = "products", key = "#result.id")
     public ProductPo createProduct(ProductPo product) {
         productDao.insert(product);
         return product;
@@ -64,7 +56,6 @@ public class ProductServiceImpl implements ProductService {
      * @return 更新后的产品
      */
     @Override
-    @CachePut(value = "products", key = "#product.id")
     public ProductPo updateProduct(ProductPo product) {
         productDao.updateByPrimaryKey(product);
         return product;
@@ -75,7 +66,6 @@ public class ProductServiceImpl implements ProductService {
      * @param id 产品ID
      */
     @Override
-    @CacheEvict(value = "products", key = "#id")
     public void deleteProduct(Long id) {
         productDao.deleteByPrimaryKey(id);
     }
@@ -87,7 +77,6 @@ public class ProductServiceImpl implements ProductService {
      * @return 产品列表
      */
     @Override
-    @Cacheable(value = "products", key = "'category:' + #categoryId")
     public List<ProductPo> getProductsByCategory(Long categoryId) {
         return productDao.selectByCategoryId(categoryId);
     }
@@ -106,8 +95,30 @@ public class ProductServiceImpl implements ProductService {
     /**
      * 清空所有产品缓存
      */
-    @CacheEvict(value = "products", allEntries = true)
-    public void clearAllProductCache() {
-        // 清空缓存
+    public void clearAll$1Cache() { }
+
+    /**
+     * 获取产品信息（兼容Controller调用）
+     */
+    @Override
+    public ProductPo getProduct() {
+        // 默认获取第一个产品
+        List<ProductPo> products = productDao.selectAll();
+        return products != null && !products.isEmpty() ? products.get(0) : null;
+    }
+
+    /**
+     * 获取产品库存（兼容Controller调用）
+     */
+    @Override
+    public String getProductNumber() {
+        // 获取产品总数
+        List<ProductPo> products = productDao.selectAll();
+        return String.valueOf(products != null ? products.size() : 0);
     }
 }
+
+
+
+
+

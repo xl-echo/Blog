@@ -4,7 +4,7 @@ import com.echo.blog.config.result.Result;
 import com.echo.blog.param.ArticleParam;
 import com.echo.blog.po.ArticlePo;
 import com.echo.blog.service.ArticleService;
-import lombok.RequiredArgsConstructor;
+import com.echo.blog.utils.JwtTokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,10 +16,10 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/articleController")
-@RequiredArgsConstructor(onConstructor = @__(@Autowired))
 public class ArticleController {
 
-    private final ArticleService articleService;
+    @Autowired
+    private ArticleService articleService;
 
     /**
      * 项目健康检查方法
@@ -47,7 +47,7 @@ public class ArticleController {
         // 验证token
         String token = articleParam.getToken();
         try {
-            com.echo.blog.utils.JwtTokenUtil.verifyToken(token);
+            JwtTokenUtil.verifyToken(token);
         } catch (Exception e) {
             result.setStatus(999);
             result.setMessage("请先登录后再发布文章");
@@ -72,7 +72,7 @@ public class ArticleController {
         
         // 验证token
         try {
-            com.echo.blog.utils.JwtTokenUtil.verifyToken(token);
+            JwtTokenUtil.verifyToken(token);
         } catch (Exception e) {
             result.setStatus(999);
             result.setMessage("请先登录后再删除文章");
@@ -97,7 +97,7 @@ public class ArticleController {
         
         // 验证token
         try {
-            com.echo.blog.utils.JwtTokenUtil.verifyToken(token);
+            JwtTokenUtil.verifyToken(token);
         } catch (Exception e) {
             result.setStatus(999);
             result.setMessage("请先登录后再更新文章");
@@ -150,3 +150,5 @@ public class ArticleController {
         return result;
     }
 }
+
+

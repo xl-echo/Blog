@@ -16,6 +16,18 @@
     values (#{articleId}, #{userId}, #{username}, #{content}, #{createTime}, #{updateTime})
   </insert>
 
+  <select id="selectById" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select id, article_id, user_id, username, content, create_time, update_time
+    from comment
+    where id = #{id}
+  </select>
+
+  <select id="selectAll" resultMap="BaseResultMap">
+    select id, article_id, user_id, username, content, create_time, update_time
+    from comment
+    order by create_time desc
+  </select>
+
   <select id="selectByArticleId" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select id, article_id, user_id, username, content, create_time, update_time
     from comment
@@ -23,7 +35,19 @@
     order by create_time desc
   </select>
 
+  <update id="updateById" parameterType="com.echo.blog.po.CommentPo">
+    update comment
+    set article_id = #{articleId},
+        user_id = #{userId},
+        username = #{username},
+        content = #{content},
+        update_time = #{updateTime}
+    where id = #{id}
+  </update>
+
   <delete id="deleteById" parameterType="java.lang.Long">
     delete from comment where id = #{id}
   </delete>
 </mapper>
+
+
