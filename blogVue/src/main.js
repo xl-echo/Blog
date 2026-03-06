@@ -25,7 +25,7 @@ Vue.use(ViewUI)
 Vue.use(iView)
 Vue.config.productionTip = false
 Vue.prototype.axios = axios
-axios.defaults.baseURL = 'http://localhost:10080'
+axios.defaults.baseURL = 'http://localhost:8888'
 Vue.use(mavonEditor)
 var showdownHighlight = require('showdown-highlight')
 Vue.prototype.md2html = (md) => {

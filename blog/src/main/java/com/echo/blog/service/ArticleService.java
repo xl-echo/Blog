@@ -110,6 +110,12 @@ public interface ArticleService {
      * @return 文章详情
      */
     ArticlePo getDetail(Integer articleId);
+
+    /**
+     * 获取文章总数
+     * @return 文章总数
+     */
+    int getCount();
 }
 
 

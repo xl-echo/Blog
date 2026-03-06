@@ -39,6 +39,16 @@ public interface CommentDao {
      * 删除评论
      */
     int deleteById(@Param("id") Long id);
+
+    /**
+     * 查询最新评论（限制数量）
+     */
+    List<CommentPo> selectLatest(@Param("limit") Integer limit);
+
+    /**
+     * 根据文章id查询评论数量
+     */
+    int countByArticleId(@Param("articleId") Long articleId);
 }
 
 

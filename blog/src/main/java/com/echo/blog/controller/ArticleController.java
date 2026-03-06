@@ -149,6 +149,19 @@ public class ArticleController {
         Result.packageResultMethod(result, articlePo);
         return result;
     }
+
+    /**
+     * 获取文章总数（无需登录）
+     *
+     * @return Result<Integer>
+     */
+    @RequestMapping(value = "/getCount", method = RequestMethod.GET)
+    public Result<Integer> getCount() {
+        Result<Integer> result = new Result<>();
+        int count = articleService.getCount();
+        Result.packageResultMethod(result, count);
+        return result;
+    }
 }
 
 

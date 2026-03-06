@@ -98,6 +98,13 @@ public interface ArticleDao {
      * @return List<ArticlePo>
      */
     List<ArticlePo> selectByTagId(Long tagId);
+
+    /**
+     * 获取文章总数
+     *
+     * @return 文章总数
+     */
+    int selectCount();
 }
 
 

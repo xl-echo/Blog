@@ -259,6 +259,10 @@
       tags = #{tags,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+    <select id="selectCount" resultType="java.lang.Integer">
+        select count(*) from article
+    </select>
 </mapper>
 
 

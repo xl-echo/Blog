@@ -48,6 +48,19 @@
   <delete id="deleteById" parameterType="java.lang.Long">
     delete from comment where id = #{id}
   </delete>
+
+  <!-- 查询最新评论 -->
+  <select id="selectLatest" resultMap="BaseResultMap">
+    select id, article_id, user_id, username, content, create_time, update_time
+    from comment
+    order by create_time desc
+    limit #{limit}
+  </select>
+
+  <!-- 根据文章 id 查询评论数量 -->
+  <select id="countByArticleId" parameterType="java.lang.Long" resultType="java.lang.Integer">
+    select count(*) from comment where article_id = #{articleId}
+  </select>
 </mapper>
 
 

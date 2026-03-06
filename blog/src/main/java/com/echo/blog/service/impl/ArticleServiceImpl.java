@@ -189,6 +189,14 @@ public class ArticleServiceImpl implements ArticleService {
         }
         return article;
     }
+
+    /**
+     * 获取文章总数
+     */
+    @Override
+    public int getCount() {
+        return articleDao.selectCount();
+    }
 }
 
 

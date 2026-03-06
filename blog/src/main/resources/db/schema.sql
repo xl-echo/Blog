@@ -31,6 +31,10 @@ CREATE TABLE `article`  (
                             `if_original` tinyint(5) DEFAULT NULL COMMENT '是否是原创 0:原创 1:转载 2:翻译',
                             `create_time` datetime DEFAULT NULL COMMENT '创建时间',
                             `update_time` datetime DEFAULT NULL COMMENT '修改时间',
+                            `views` bigint(11) DEFAULT 0 COMMENT '阅读量',
+                            `likes` bigint(11) DEFAULT 0 COMMENT '点赞数',
+                            `category_id` bigint(11) DEFAULT NULL COMMENT '分类ID',
+                            `tags` varchar(255) DEFAULT NULL COMMENT '标签',
                             PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 32 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;
 
